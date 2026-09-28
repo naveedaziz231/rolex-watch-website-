@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROLEX Admin Portal | Manage Products & Prices</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/f/f4/Rolex_logo.svg" type="image/svg+xml">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- ================= ADMIN NAVBAR ================= -->
+    <header class="admin-header">
+        <div class="container admin-header-flex">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="index.html" class="brand-logo">
+                    <svg class="crown-icon" viewBox="0 0 100 100">
+                        <path d="M50 15 L62 45 L78 25 L80 65 L20 65 L22 25 L38 45 Z M18 70 L82 70 L82 76 L18 76 Z M20 80 L80 80 L76 86 L24 86 Z"></path>
+                        <circle cx="50" cy="12" r="5"></circle>
+                        <circle cx="78" cy="22" r="4.5"></circle>
+                        <circle cx="22" cy="22" r="4.5"></circle>
+                    </svg>
+                    <span class="brand-title">ROLEX</span>
+                </a>
+                <span class="admin-badge"><i class="fas fa-database"></i> Product Manager</span>
+            </div>
+
+            <div style="display: flex; gap: 14px; align-items: center;">
+                <a href="index.html" class="btn-secondary" style="padding: 10px 20px; font-size: 0.8rem;">
+                    <i class="fas fa-external-link-alt"></i> View Live Website
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN ADMIN CONTENT ================= -->
+    <main class="admin-main">
+        <div class="container">
+
+            <!-- Supabase Connection Status Bar -->
+            <div class="status-indicator-bar">
+                <div class="status-indicator">
+                    <span class="status-dot" id="connection-dot"></span>
+                    <span id="connection-text" style="font-weight: 500;">Checking Supabase Connection...</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #94a3b8;">
+                    Project: <code style="color: #6ee7b7;">iqszzwqwmunkskbgbzzr</code>
+                </div>
+            </div>
+
+            <div class="admin-grid-layout">
+                
+                <!-- Left Column: Add / Edit Form -->
+                <div class="admin-panel-card">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title" id="form-title">
+                            <i class="fas fa-plus-circle" style="color: var(--rolex-green-light);"></i> Add Rolex Watch
+                        </h2>
+                    </div>
+
+                    <form id="watch-form" class="admin-form">
+                        <div class="form-field">
+                            <label class="form-label" for="watch-name">Watch Name <span class="req">*</span></label>
+                            <input type="text" id="watch-name" class="admin-input" placeholder="e.g. Rolex Submariner Date" required>
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-field">
+                                <label class="form-label" for="watch-model">Model / Subtitle <span class="req">*</span></label>
+                                <input type="text" id="watch-model" class="admin-input" placeholder="e.g. Oystersteel & Cerachrom" required>
+                            </div>
+                            <div class="form-field">
+                                <label class="form-label" for="watch-ref">Reference #</label>
+                                <input type="text" id="watch-ref" class="admin-input" placeholder="e.g. 126610LN">
+                            </div>
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-field">
+                                <label class="form-label" for="watch-category">Category</label>
+                                <select id="watch-category" class="admin-select">
+                                    <option value="Professional">Professional</option>
+                                    <option value="Classic">Classic</option>
+                                    <option value="Submariner">Submariner</option>
+                                    <option value="Daytona">Daytona</option>
+                                    <option value="Sky-Dweller">Sky-Dweller</option>
+                                    <option value="GMT-Master II">GMT-Master II</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label class="form-label" for="watch-price">Price <span class="req">*</span></label>
+                                <div style="display: flex; gap: 6px;">
+                                    <select id="watch-currency" class="admin-select" style="width: 80px; flex-shrink: 0;">
+                                        <option value="USD">USD ($)</option>
+                                        <option value="EUR">EUR (€)</option>
+                                        <option value="GBP">GBP (£)</option>
+                                        <option value="PKR">PKR (Rs)</option>
+                                        <option value="AED">AED</option>
+                                    </select>
+                                    <input type="number" id="watch-price" class="admin-input" placeholder="10250" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label" for="watch-image">Watch Image URL <span class="req">*</span></label>
+                            <input type="url" id="watch-image" class="admin-input" placeholder="https://example.com/watch.jpg" required>
+                            
+                            <!-- Quick Image Sample Presets -->
+                            <div style="margin-top: 6px; font-size: 0.75rem; color: #94a3b8; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                <span>Quick Presets:</span>
+                                <a href="javascript:void(0)" onclick="setImagePreset('submariner')" style="color: #6ee7b7; text-decoration: underline;">Submariner</a>
+                                <a href="javascript:void(0)" onclick="setImagePreset('daytona')" style="color: #6ee7b7; text-decoration: underline;">Daytona</a>
+                                <a href="javascript:void(0)" onclick="setImagePreset('daydate')" style="color: #6ee7b7; text-decoration: underline;">Day-Date</a>
+                                <a href="javascript:void(0)" onclick="setImagePreset('gmt')" style="color: #6ee7b7; text-decoration: underline;">GMT</a>
+                            </div>
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-field">
+                                <label class="form-label" for="watch-dial">Dial Color</label>
+                                <input type="text" id="watch-dial" class="admin-input" placeholder="e.g. Intense Black / Emerald">
+                            </div>
+                            <div class="form-field">
+                                <label class="form-label" for="watch-case">Case Material</label>
+                                <input type="text" id="watch-case" class="admin-input" placeholder="e.g. Oystersteel 41 mm">
+                            </div>
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-field">
+                                <label class="form-label" for="watch-bracelet">Bracelet</label>
+                                <input type="text" id="watch-bracelet" class="admin-input" placeholder="e.g. Oyster / Jubilee">
+                            </div>
+                            <div class="form-field">
+                                <label class="form-label" for="watch-movement">Movement</label>
+                                <input type="text" id="watch-movement" class="admin-input" placeholder="e.g. Calibre 3235">
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label" for="watch-desc">Description / Story</label>
+                            <textarea id="watch-desc" class="admin-textarea" placeholder="Detailed luxury description of the watch craftsmanship..."></textarea>
+                        </div>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="watch-featured">
+                            <span>Feature this watch on homepage highlight banner</span>
+                        </label>
+
+                        <button type="submit" id="btn-submit-watch" class="btn-admin-submit">
+                            <i class="fas fa-save"></i> Save Watch to Supabase
+                        </button>
+                        <button type="button" id="btn-cancel-edit" class="btn-admin-cancel">
+                            Cancel Editing
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right Column: Products List Table -->
+                <div class="admin-panel-card">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title">
+                            <i class="fas fa-list" style="color: var(--gold-primary);"></i> Current Catalog
+                        </h2>
+                        <span id="total-watch-count" class="watch-category-badge">0 Watches</span>
+                    </div>
+
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Watch Name</th>
+                                    <th>Ref #</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="watches-table-body">
+                                <!-- Populated dynamically from Supabase via admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Config & Admin Script -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
